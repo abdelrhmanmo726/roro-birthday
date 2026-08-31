@@ -1,0 +1,305 @@
+/* ===========================
+   Proposal Screen & Web Background
+=========================== */
+
+.proposal-screen {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    
+    /* دمج صورة الخلفية مع عتمة بنفسجية + الشبكة العنكبوتية معاً */
+    background: 
+        linear-gradient(rgba(21, 12, 31, 0.75), rgba(42, 27, 61, 0.85)), 
+        url('../assets/images/background.png') no-repeat center center / cover;
+}
+
+.proposal-screen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.25;
+    background-image: 
+        radial-gradient(circle at center, transparent 20%, rgba(13, 7, 20, 0.85) 85%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500' viewBox='0 0 500 500'%3E%3Cg stroke='%23ff3385' stroke-width='1.5' fill='none' opacity='0.75'%3E%3Cline x1='250' y1='0' x2='250' y2='500'/%3E%3Cline x1='0' y1='250' x2='500' y2='250'/%3E%3Cline x1='73.2' y1='73.2' x2='426.8' y2='426.8'/%3E%3Cline x1='426.8' y1='73.2' x2='73.2' y2='426.8'/%3E%3Cpolygon points='250,200 285,215 300,250 285,285 250,300 215,285 200,250 215,215'/%3E%3Cpolygon points='250,150 320,180 350,250 320,320 250,350 180,320 150,250 180,180'/%3E%3Cpolygon points='250,100 356,145 400,250 356,355 250,400 144,355 100,250 144,145'/%3E%3Cpolygon points='250,50 391,109 450,250 391,391 250,450 109,391 50,250 109,109'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 500px 500px;
+    background-position: center;
+    animation: fullWebPulse 8s ease-in-out infinite alternate;
+}
+
+/* ===========================
+   HUD Boxes System
+=========================== */
+
+.hud-box {
+    position: fixed;
+    top: 30px;
+    z-index: 10;
+    width: 220px;
+    padding: 16px 20px;
+    border-radius: 20px;
+    background: rgba(18, 10, 26, 0.75);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 51, 133, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 51, 133, 0.15);
+    color: white;
+    font-family: monospace, sans-serif;
+}
+
+.vital-hud {
+    left: 30px;
+}
+
+.stats-hud {
+    right: 30px;
+}
+
+.hud-header {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.hud-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ff3385;
+    box-shadow: 0 0 8px #ff3385;
+    animation: dotPulse 1.2s infinite;
+}
+
+/* Vital / ECG Graphic */
+.bpm-display {
+    font-size: 32px;
+    font-weight: 900;
+    color: #ff3385;
+    transition: color 0.3s;
+}
+
+.bpm-display small {
+    font-size: 12px;
+    color: #ff80bf;
+}
+
+.ecg-graph {
+    width: 100%;
+    height: 24px;
+    margin-top: 8px;
+    overflow: hidden;
+    position: relative;
+    border-bottom: 1px solid rgba(255, 51, 133, 0.2);
+}
+
+.ecg-line {
+    position: absolute;
+    width: 200%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='24' viewBox='0 0 100 24'%3E%3Cpath d='M0 12 L30 12 L35 4 L40 20 L45 8 L50 15 L55 12 L100 12' fill='none' stroke='%23ff3385' stroke-width='2'/%3E%3C/svg%3E");
+    background-size: 100px 24px;
+    animation: ecgMove 1.2s linear infinite;
+}
+
+/* Stats HUD Items */
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    margin-top: 8px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    padding-bottom: 4px;
+}
+
+.stat-item span {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.stat-item strong {
+    color: #ff80bf;
+}
+
+/* ===========================
+   Proposal Card Box
+=========================== */
+
+.proposal-container {
+    width: min(720px, 95vw);
+    position: relative;
+    overflow: hidden;
+    padding: 45px;
+    text-align: center;
+    border-radius: 32px;
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.4),
+        0 0 40px rgba(255, 0, 128, 0.15);
+    animation: cardFloat 4s ease-in-out infinite;
+    z-index: 1;
+}
+
+/* اسم Roro النيون */
+.target-name {
+    font-size: 20px;
+    font-weight: 900;
+    color: #ff80bf;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    text-shadow: 0 0 12px rgba(255, 128, 191, 0.8);
+    animation: pulseGlow 2s ease-in-out infinite alternate;
+}
+
+.proposal-image {
+    width: 240px;
+    border-radius: 22px;
+    margin-bottom: 25px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+    object-fit: cover;
+}
+
+.proposal-title {
+    font-size: 46px;
+    color: white;
+    margin-bottom: 10px;
+    font-weight: 800;
+    text-shadow: 0 0 20px rgba(255, 90, 170, 0.6);
+    min-height: 55px;
+}
+
+.proposal-message {
+    font-size: 24px;
+    color: white;
+    min-height: 55px;
+    margin-bottom: 30px;
+    line-height: 1.5;
+    font-weight: 600;
+}
+
+.proposal-buttons {
+    position: relative;
+    width: min(500px, 100%);
+    height: 200px;
+    margin: 20px auto 0 auto;
+}
+
+.yes-btn,
+.no-btn {
+    position: absolute;
+    width: 160px;
+    height: 60px;
+    border: none;
+    border-radius: 18px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+}
+
+.yes-btn {
+    left: 40px;
+    top: 70px;
+    color: white;
+    background: linear-gradient(135deg, #ff4d88, #ff7eb3);
+    box-shadow: 0 10px 30px rgba(255, 70, 140, 0.4);
+    z-index: 10;
+}
+
+.yes-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 30px rgba(255, 90, 170, 0.8);
+}
+
+.no-btn {
+    left: 280px;
+    top: 70px;
+    color: white;
+    background: #3b3b3b;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    z-index: 5;
+}
+
+/* ===========================
+   Keyframe Animations
+=========================== */
+
+@keyframes cardFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes fullWebPulse {
+    0% { opacity: 0.18; transform: scale(1); }
+    100% { opacity: 0.32; transform: scale(1.04); }
+}
+
+@keyframes ecgMove {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100px); }
+}
+
+@keyframes dotPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+@keyframes pulseGlow {
+    from { opacity: 0.7; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1.04); }
+}
+
+/* ===========================
+   Responsive Design (Mobile)
+=========================== */
+
+@media (max-width: 768px) {
+    .hud-box {
+        position: relative;
+        top: auto;
+        left: auto !important;
+        right: auto !important;
+        width: min(320px, 90vw);
+        margin: 10px auto;
+    }
+
+    .proposal-screen {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .proposal-container {
+        padding: 30px 20px;
+    }
+
+    .proposal-title {
+        font-size: 34px;
+        min-height: 45px;
+    }
+
+    .proposal-buttons {
+        width: 100%;
+        height: 220px;
+    }
+
+    .yes-btn {
+        left: 20px;
+    }
+
+    .no-btn {
+        left: calc(100% - 180px);
+    }
+}

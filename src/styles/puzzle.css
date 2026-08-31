@@ -1,0 +1,410 @@
+/* ===========================
+   Global Setup
+=========================== */
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: 
+    radial-gradient(circle at top left, rgba(255, 120, 180, 0.18), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(120, 180, 255, 0.15), transparent 35%),
+    linear-gradient(135deg, #151320, #221d37, #2a2346);
+}
+
+/* ===========================
+   Puzzle Screen Layout
+=========================== */
+.puzzle-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow-x: hidden;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  
+  /* خلفية الصورة مع طبقة عتمة متناسقة بدلاً من الألوان */
+  background: 
+    linear-gradient(rgba(21, 12, 31, 0.75), rgba(42, 27, 61, 0.85)), 
+    url('../assets/images/background.png') no-repeat center center / cover;
+}
+
+/* الإضاءات الخلفية */
+.puzzle-screen::before {
+  content: "";
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  top: -180px;
+  left: -180px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.20), transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+  animation: ambientGlowShift 10s ease-in-out infinite alternate;
+}
+
+.puzzle-screen::after {
+  content: "";
+  position: absolute;
+  right: -220px;
+  bottom: -220px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 150, 210, 0.16), transparent 70%);
+  filter: blur(65px);
+  pointer-events: none;
+  animation: ambientGlowShift 12s ease-in-out infinite alternate-reverse;
+}
+
+/* العنوان والوصف ثابتين في الأعلى دائماً */
+.puzzle-screen h1 {
+  font-size: 42px;
+  margin: 0 0 12px 0;
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  animation: 
+    titleEnter 0.8s ease,
+    titleGlowPulse 4s ease-in-out infinite 0.8s;
+  z-index: 2;
+}
+
+.puzzle-screen p {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 18px;
+  line-height: 1.6;
+  max-width: 430px;
+  margin: 0 0 30px 0;
+  z-index: 2;
+}
+
+/* ===========================
+   Puzzle Layout (الحاوية المشتركة للبازل والكارت)
+=========================== */
+.puzzle-layout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0px; 
+  width: 100%;
+  max-width: 1100px;
+  min-height: 450px;
+  position: relative;
+  z-index: 2;
+  transition: gap 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.puzzle-layout.completed {
+  gap: 60px; /* فتح المسافة بسلاسة لتظهر الكارت بجانب البازل */
+}
+
+/* ===========================
+   Puzzle Container & Board
+=========================== */
+.puzzle-container {
+  position: relative;
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+}
+
+.puzzle-layout.completed .puzzle-container {
+  transform: scale(0.95);
+}
+
+.puzzle-layout.completed .puzzle-board {
+  animation: boardSuccessGlow 2s ease infinite alternate;
+}
+
+.puzzle-board {
+  width: 360px;
+  height: 360px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 0;
+  overflow: hidden;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 
+    0 35px 80px rgba(0, 0, 0, 0.45),
+    0 0 35px rgba(255, 120, 180, 0.08);
+  cursor: pointer;
+  perspective: 1000px;
+  animation: boardIntro 0.8s ease;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.puzzle-board:hover {
+  transform: translateY(-6px) scale(1.02) rotateX(3deg);
+  box-shadow: 
+    0 40px 90px rgba(0, 0, 0, 0.5),
+    0 0 45px rgba(255, 120, 180, 0.22);
+}
+
+.puzzle-piece {
+  width: 100%;
+  height: 100%;
+  background-size: 300% 300%;
+  background-repeat: no-repeat;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.puzzle-piece:hover {
+  transform: scale(1.05);
+  filter: brightness(1.12);
+  z-index: 2;
+}
+
+/* ===========================
+   Greeting Card (الكارت الجانبي)
+=========================== */
+.puzzle-success {
+  position: relative;
+  width: 320px;
+  height: 430px;
+  perspective: 2000px;
+  z-index: 3;
+  flex-shrink: 0;
+  
+  opacity: 0;
+  transform: translateX(60px) scale(0.9);
+  pointer-events: none;
+  transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.puzzle-layout.completed .puzzle-success {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+  animation: cardFloat 4s ease-in-out infinite 1s;
+}
+
+.card-content {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #fffdfd, #fff5f8);
+  border-radius: 24px;
+  padding: 30px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #555;
+  box-shadow: 
+    0 25px 70px rgba(0, 0, 0, 0.25),
+    0 0 40px rgba(255, 170, 210, 0.22);
+  z-index: 1;
+  overflow: hidden;
+}
+
+.card-content::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 180, 210, 0.35);
+  pointer-events: none;
+}
+
+.card-content::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.35), transparent 45%);
+  pointer-events: none;
+}
+
+/* ===========================
+   Card Cover
+=========================== */
+.card-cover {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: linear-gradient(145deg, #ff9fc9, #ff74b5);
+  transform-origin: right center; 
+  transform-style: preserve-3d;
+  transition: box-shadow 0.5s;
+  z-index: 5;
+}
+
+.puzzle-layout.completed .card-cover {
+  animation: openCardRight 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards 0.3s;
+  box-shadow: 
+    -20px 25px 50px rgba(0,0,0,.25),
+    0 0 25px rgba(255,120,180,.25);
+}
+
+.card-cover::before {
+  content: "💖";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 55px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  animation: heartIconPulse 2s ease-in-out infinite;
+}
+
+.card-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: linear-gradient(145deg, #ff74b5, #ff60aa);
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* ===========================
+   Card Text & Button
+=========================== */
+.card-content h2 {
+  font-size: 28px;
+  margin: 0 0 14px 0;
+  color: #ff5f9e;
+}
+
+.card-content p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #666;
+  margin: 0;
+}
+
+.card-content button {
+  position: relative;
+  margin-top: 24px;
+  padding: 12px 34px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff8ec0, #ff6dae);
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(255, 100, 170, 0.35);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card-content button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.45),
+    transparent
+  );
+  transform: translateX(-140%);
+  animation: buttonGlow 2.2s infinite 2.0s;
+}
+
+.card-content button:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(255, 100, 170, 0.5);
+}
+
+.card-content button:active {
+  transform: scale(0.97);
+}
+
+/* ===========================
+   Keyframes
+=========================== */
+@keyframes openCardRight {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(155deg); }
+}
+
+@keyframes buttonGlow {
+  0% { transform: translateX(-140%); }
+  40%, 100% { transform: translateX(140%); }
+}
+
+@keyframes titleEnter {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes boardIntro {
+  from { opacity: 0; transform: scale(0.88) rotate(-2deg); }
+  to { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes cardFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes boardSuccessGlow {
+  0% { box-shadow: 0 35px 80px rgba(0,0,0,.45), 0 0 25px rgba(255,120,180,.15); }
+  100% { box-shadow: 0 35px 80px rgba(0,0,0,.45), 0 0 50px rgba(255,120,180,.35); }
+}
+
+@keyframes ambientGlowShift {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(30px, 20px) scale(1.1); }
+}
+
+@keyframes titleGlowPulse {
+  0%, 100% { text-shadow: 0 0 18px rgba(255, 120, 180, 0.35); }
+  50% { text-shadow: 0 0 28px rgba(255, 120, 180, 0.65); }
+}
+
+@keyframes heartIconPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.12); }
+}
+
+/* ===========================
+   Responsive Design
+=========================== */
+@media (max-width: 900px) {
+  .puzzle-layout {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .puzzle-layout.completed {
+    gap: 30px;
+  }
+
+  .puzzle-success {
+    width: 300px;
+    height: 400px;
+    transform: translateY(20px) scale(0.9);
+  }
+
+  .puzzle-layout.completed .puzzle-success {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 500px) {
+  .puzzle-board {
+    width: 290px;
+    height: 290px;
+  }
+
+  .puzzle-success {
+    width: 280px;
+    height: 380px;
+  }
+
+  .puzzle-screen h1 {
+    font-size: 32px;
+  }
+}

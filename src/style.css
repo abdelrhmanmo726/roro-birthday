@@ -1,0 +1,22 @@
+@import "./styles/variables.css";
+@import "./styles/globals.css";
+@import "./styles/components.css";
+@import "./styles/animations.css";
+@import "./styles/puzzle.css";
+@import "./styles/realPuzzle.css";
+@import "./styles/proposal.css";
+@import "./styles/cakeEnding.css";
+@import "./styles/cinematic.css";
+
+
+html,
+body,
+#root {
+    width: 100%;
+    min-height: 100%;
+    height: auto !important;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto !important; /* السماح بالتمرير الرأسي بكل سلاسة */
+    overflow-x: hidden;
+}

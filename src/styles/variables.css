@@ -1,0 +1,16 @@
+:root {
+
+    --bg-main: #0f0c29;
+    --bg-secondary: #302b63;
+
+    --card-bg: rgba(255,255,255,0.08);
+
+    --text-main: #ffffff;
+    --text-muted: rgba(255,255,255,0.7);
+
+    --primary: #ff5f9e;
+    --primary-light: #ff8fab;
+
+    --border: rgba(255,255,255,0.15);
+
+}

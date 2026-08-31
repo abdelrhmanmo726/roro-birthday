@@ -1,0 +1,326 @@
+/* ===========================
+   Real Puzzle Screen & Layout
+=========================== */
+
+.real-puzzle-screen {
+  width: 100%;
+  min-height: 100vh;
+  height: auto !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start !important;
+  align-items: center;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  position: relative;
+  padding: 50px 20px !important;
+  box-sizing: border-box;
+
+  /* خلفية الصورة مع طبقة عتمة متناسقة بدلاً من الألوان */
+  background: 
+    linear-gradient(rgba(21, 12, 31, 0.75), rgba(42, 27, 61, 0.85)), 
+    url('../assets/images/background.png') no-repeat center center / cover;
+}
+
+.real-puzzle-screen h1 {
+  margin-bottom: 8px;
+  font-size: 40px;
+  color: #ffffff;
+  font-weight: 800;
+  text-shadow: 0 0 15px rgba(255, 120, 180, 0.4);
+}
+
+.real-puzzle-screen p {
+  margin-bottom: 20px;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ===========================
+   Puzzle + Card Layout
+=========================== */
+
+.real-puzzle-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  position: relative;
+  width: 100%;
+  max-width: 1250px;
+}
+
+/* إضاءة نيون خلفية ناعمة لتغذية البصر (Visual Depth) */
+.real-puzzle-layout::before {
+  content: "";
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: radial-gradient(circle, rgba(255, 83, 155, 0.22) 0%, transparent 70%);
+  filter: blur(50px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===========================
+   Real Puzzle Board
+=========================== */
+
+.real-puzzle-wrapper {
+  width: 800px;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, .06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, .3),
+    0 0 40px rgba(255, 120, 180, .18);
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  z-index: 1;
+}
+
+#real-puzzle-board {
+  width: 800px;
+  height: 600px;
+  border-radius: 25px;
+}
+
+/* ===========================
+   Greeting Card Outer
+=========================== */
+
+.real-card-success {
+  width: 320px;
+  height: 460px;
+  position: relative;
+  
+  perspective: 1500px !important;
+  transform-style: preserve-3d !important;
+  
+  display: none !important;
+  opacity: 0;
+  transform: translateX(30px) scale(0.85);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.real-card-success.active {
+  display: block !important;
+  pointer-events: auto;
+  animation: 
+    cardAppear 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+    cardFloaty 4s ease-in-out infinite 0.7s;
+}
+
+/* ===========================
+   Card Cover (إصلاح مشكلة الاختفاء)
+=========================== */
+
+.real-card-success .card-cover {
+  position: absolute;
+  inset: 0;
+  border-radius: 26px;
+  background: linear-gradient(135deg, #ff82b2 0%, #ff3b8d 100%) !important;
+  
+  transform-origin: right center !important;
+  transform-style: preserve-3d !important;
+  
+  z-index: 25 !important;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  box-shadow: -10px 20px 40px rgba(0, 0, 0, 0.35);
+  
+  backface-visibility: visible !important;
+  -webkit-backface-visibility: visible !important;
+  
+  border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
+  overflow: visible !important; 
+}
+
+/* انعكاس ضوئي زجاجي على الغلاف الوردي */
+.real-card-success .card-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 25px;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0.05) 40%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.real-card-success .cover-heart {
+  font-size: 65px;
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));
+  animation: heartPulse 1.8s ease-in-out infinite;
+  z-index: 2;
+}
+
+.real-card-success .cover-text {
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  z-index: 2;
+}
+
+.real-card-success.active .card-cover {
+  animation: openCard3D 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards 0.6s !important;
+}
+
+/* ===========================
+   Card Content (محتوى الكارت)
+=========================== */
+
+.real-card-success .card-content {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #ffffff, #fff2f7) !important;
+  border-radius: 26px;
+  padding: 24px 20px;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #555;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  z-index: 5 !important;
+}
+
+/* إطار منقط ناعم وشيك بداخل الورقة */
+.real-card-success .card-content::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 18px;
+  border: 1px dashed rgba(255, 105, 180, 0.35);
+  pointer-events: none;
+}
+
+.real-card-success .animated-cake {
+  font-size: 48px;
+  margin-bottom: 6px;
+  filter: drop-shadow(0 0 10px rgba(255, 120, 180, 0.5));
+  animation: cakeBounce 2.5s ease-in-out infinite;
+}
+
+/* عنوان بتدرج ألوان متناسق مع التوافقية الشاملة */
+.real-card-success .card-content h2 {
+  background: linear-gradient(135deg, #ff2a85, #ff73b3);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0 0 8px 0;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.real-card-success .card-content p {
+  line-height: 1.6;
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  white-space: pre-line;
+}
+
+.real-card-success .next-btn {
+  position: relative;
+  margin-top: 18px;
+  padding: 10px 28px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff7ba9, #ff3385);
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(255, 51, 133, 0.35);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.real-card-success .next-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
+  transform: translateX(-140%);
+  animation: buttonShimmer 2.5s infinite;
+}
+
+.real-card-success .next-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 12px 28px rgba(255, 51, 133, 0.5);
+}
+
+/* ===========================
+   Keyframe Animations
+=========================== */
+
+@keyframes cardAppear {
+  from {
+    opacity: 0;
+    transform: translateX(40px) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes cardFloaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes openCard3D {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(115deg);
+  }
+}
+
+@keyframes cakeBounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-6px) scale(1.06); }
+}
+
+@keyframes buttonShimmer {
+  0% { transform: translateX(-140%); }
+  40%, 100% { transform: translateX(140%); }
+}
+
+@keyframes heartPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+/* ===========================
+   Responsive Design
+=========================== */
+
+@media (max-width: 900px) {
+  .real-puzzle-layout {
+    flex-direction: column;
+    gap: 30px;
+  }
+}
