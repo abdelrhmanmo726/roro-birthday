@@ -16,7 +16,7 @@ function sanitizeImageUrl(url) {
 
 export function CakeEndingBox(photoSrc) {
     const safePhoto = sanitizeImageUrl(photoSrc);
-    const currentDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    const currentDate = "November 10, 2026";
 
     const bowRibbonSvg = `
         <svg class="bow-svg" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">

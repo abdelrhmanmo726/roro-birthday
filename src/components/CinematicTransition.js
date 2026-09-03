@@ -1,4 +1,5 @@
 import gsap from "gsap";
+import eyesImage from "../assets/images/eyes.jpg";
 
 export function createCinematicTransition(onComplete) {
     const overlay = document.createElement("div");
@@ -9,7 +10,7 @@ export function createCinematicTransition(onComplete) {
 
         <div class="cinematic-image-container">
             <img
-                src="./src/assets/images/eyes.jpg"
+                src="${eyesImage}"
                 alt="Eyes"
                 class="cinematic-eyes-img"
             />
@@ -56,43 +57,168 @@ export function createCinematicTransition(onComplete) {
 
     if (prefersReducedMotion) {
         tl.to(overlay, { opacity: 1, duration: 0.5, ease: "power2.out" })
-          .add(() => { textEl.textContent = "I find myself getting lost in your eyes."; })
-          .to(imgEl, { opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "power2.out" })
-          .to(textEl, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" })
-          .to(textEl, { opacity: 0, duration: 0.5, delay: 1.2 })
-          .to(imgEl, { opacity: 0, duration: 0.7, ease: "power2.inOut" });
+          .add(() => {
+              textEl.textContent = "I find myself getting lost in your eyes.";
+          })
+          .to(imgEl, {
+              opacity: 1,
+              filter: "blur(0px)",
+              duration: 0.8,
+              ease: "power2.out"
+          })
+          .to(textEl, {
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              ease: "power2.out"
+          })
+          .to(textEl, {
+              opacity: 0,
+              duration: 0.5,
+              delay: 1.2
+          })
+          .to(imgEl, {
+              opacity: 0,
+              duration: 0.7,
+              ease: "power2.inOut"
+          });
+
         return;
     }
 
-    tl.to(overlay, { opacity: 1, duration: 0.8, ease: "power2.inOut" })
+    tl.to(overlay, {
+        opacity: 1,
+        duration: 0.8,
+        ease: "power2.inOut"
+    })
 
-      .add(() => { textEl.textContent = "You know in the end..."; }, "+=0.25")
-      .to(textEl, { opacity: 1, y: 0, duration: 0.65, ease: "power2.out" })
-      .to(textEl, { opacity: 0, y: -4, duration: 0.45, delay: 0.8, ease: "power2.in" })
+      .add(() => {
+          textEl.textContent = "You know in the end...";
+      }, "+=0.25")
+      .to(textEl, {
+          opacity: 1,
+          y: 0,
+          duration: 0.65,
+          ease: "power2.out"
+      })
+      .to(textEl, {
+          opacity: 0,
+          y: -4,
+          duration: 0.45,
+          delay: 0.8,
+          ease: "power2.in"
+      })
 
-      .add(() => { textEl.textContent = "There's one little truth I keep with me."; }, "+=0.2")
-      .to(textEl, { opacity: 1, y: 0, duration: 0.65, ease: "power2.out" })
-      .to(textEl, { opacity: 0, y: -4, duration: 0.45, delay: 0.95, ease: "power2.in" })
+      .add(() => {
+          textEl.textContent = "There's one little truth I keep with me.";
+      }, "+=0.2")
+      .to(textEl, {
+          opacity: 1,
+          y: 0,
+          duration: 0.65,
+          ease: "power2.out"
+      })
+      .to(textEl, {
+          opacity: 0,
+          y: -4,
+          duration: 0.45,
+          delay: 0.95,
+          ease: "power2.in"
+      })
 
-      .add(() => { textEl.textContent = "Every time we talk..."; }, "+=0.2")
-      .to(textEl, { opacity: 1, y: 0, duration: 0.65, ease: "power2.out" })
-      .to(imgEl, { opacity: 1, filter: "blur(0px)", duration: 1.65, ease: "power2.out" }, "-=0.45")
-      .to(textEl, { opacity: 0, y: -4, duration: 0.45, delay: 0.45, ease: "power2.in" })
+      .add(() => {
+          textEl.textContent = "Every time we talk...";
+      }, "+=0.2")
+      .to(textEl, {
+          opacity: 1,
+          y: 0,
+          duration: 0.65,
+          ease: "power2.out"
+      })
+      .to(imgEl, {
+          opacity: 1,
+          filter: "blur(0px)",
+          duration: 1.65,
+          ease: "power2.out"
+      }, "-=0.45")
+      .to(textEl, {
+          opacity: 0,
+          y: -4,
+          duration: 0.45,
+          delay: 0.45,
+          ease: "power2.in"
+      })
 
-      .to(imgEl, { scale: 0.85, xPercent: -0.2, yPercent: 0.1, duration: 1.25, ease: "power1.inOut" })
-      .to(imgEl, { scale: 0.95, xPercent: 0.2, yPercent: -0.1, duration: 2.25, ease: "power1.inOut" }, "<")
+      .to(imgEl, {
+          scale: 0.85,
+          xPercent: -0.2,
+          yPercent: 0.1,
+          duration: 1.25,
+          ease: "power1.inOut"
+      })
+      .to(imgEl, {
+          scale: 0.95,
+          xPercent: 0.2,
+          yPercent: -0.1,
+          duration: 2.25,
+          ease: "power1.inOut"
+      }, "<")
 
-      .to(lightSweep, { x: "180%", opacity: 0.48, duration: 1.35, ease: "power1.inOut" }, "-=1.8")
-      .to(lightSweep, { opacity: 0, duration: 0.25, ease: "power2.in" }, "-=0.2")
+      .to(lightSweep, {
+          x: "180%",
+          opacity: 0.48,
+          duration: 1.35,
+          ease: "power1.inOut"
+      }, "-=1.8")
+      .to(lightSweep, {
+          opacity: 0,
+          duration: 0.25,
+          ease: "power2.in"
+      }, "-=0.2")
 
-      .add(() => { textEl.textContent = "I find myself getting lost in your eyes."; })
-      .to(textEl, { opacity: 1, y: -4, duration: 0.75, ease: "power2.out" })
-      .to(textEl, { opacity: 0, y: -8, duration: 0.5, delay: 1.15, ease: "power2.in" })
+      .add(() => {
+          textEl.textContent = "I find myself getting lost in your eyes.";
+      })
+      .to(textEl, {
+          opacity: 1,
+          y: -4,
+          duration: 0.75,
+          ease: "power2.out"
+      })
+      .to(textEl, {
+          opacity: 0,
+          y: -8,
+          duration: 0.5,
+          delay: 1.15,
+          ease: "power2.in"
+      })
 
-      .add(() => { textEl.textContent = "They just... stay with me, always."; })
-      .to(textEl, { opacity: 1, y: 0, duration: 0.75, ease: "power2.out" })
-      .to(textEl, { opacity: 0, y: -5, duration: 0.65, delay: 1.25, ease: "power2.in" })
+      .add(() => {
+          textEl.textContent = "They just... stay with me, always.";
+      })
+      .to(textEl, {
+          opacity: 1,
+          y: 0,
+          duration: 0.75,
+          ease: "power2.out"
+      })
+      .to(textEl, {
+          opacity: 0,
+          y: -5,
+          duration: 0.65,
+          delay: 1.25,
+          ease: "power2.in"
+      })
 
-      .to(imgEl, { opacity: 0, scale: 0.98, duration: 1.05, ease: "power2.inOut" })
-      .to(overlay, { backgroundColor: "#000000", duration: 0.45, ease: "power2.inOut" }, "-=0.45");
+      .to(imgEl, {
+          opacity: 0,
+          scale: 0.98,
+          duration: 1.05,
+          ease: "power2.inOut"
+      })
+      .to(overlay, {
+          backgroundColor: "#000000",
+          duration: 0.45,
+          ease: "power2.inOut"
+      }, "-=0.45");
 }
