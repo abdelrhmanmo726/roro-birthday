@@ -16,7 +16,7 @@ import {
 
 import { Puzzle1 } from "../pages/Puzzle1";
 
-const SECRET_CODE = "88888888";
+const SECRET_CODE = "67676767";
 
 let currentCode = [];
 
