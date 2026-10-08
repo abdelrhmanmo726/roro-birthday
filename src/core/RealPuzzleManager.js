@@ -1,7 +1,9 @@
 import Konva from "konva";
+import { playPuzzleSnap } from "./SoundEffects.js";
 
-let stage;
-let layer;
+let stage = null;
+let layer = null;
+let resizeHandler = null;
 const ROWS = 3;
 const COLS = 4;
 const SNAP_THRESHOLD = 35;
@@ -9,6 +11,12 @@ const SNAP_THRESHOLD = 35;
 export function initRealPuzzle(imagePath, onWinCallback) {
   const container = document.getElementById("real-puzzle-board");
   if (!container) return;
+
+  if (stage) {
+    if (resizeHandler) window.removeEventListener("resize", resizeHandler);
+    stage.destroy();
+    stage = null;
+  }
 
   container.innerHTML = "";
 
@@ -23,6 +31,21 @@ export function initRealPuzzle(imagePath, onWinCallback) {
 
   layer = new Konva.Layer();
   stage.add(layer);
+
+  function fitStageIntoParent() {
+    if (!stage) return;
+    const wrapper = document.querySelector(".real-puzzle-wrapper");
+    if (!wrapper) return;
+    const containerWidth = wrapper.clientWidth || stageWidth;
+    const scale = Math.min(1, containerWidth / stageWidth);
+    stage.width(stageWidth * scale);
+    stage.height(stageHeight * scale);
+    stage.scale({ x: scale, y: scale });
+    stage.draw();
+  }
+
+  resizeHandler = fitStageIntoParent;
+  window.addEventListener("resize", resizeHandler);
 
   const image = new Image();
   image.src = imagePath;
@@ -213,6 +236,7 @@ export function initRealPuzzle(imagePath, onWinCallback) {
             piece.shadowOpacity(0.1);
             piece.isSnapped = true;
             placedCount++;
+            playPuzzleSnap();
 
             layer.draw();
 
@@ -263,5 +287,6 @@ export function initRealPuzzle(imagePath, onWinCallback) {
     }
 
     layer.draw();
+    fitStageIntoParent();
   };
 }

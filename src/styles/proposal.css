@@ -233,6 +233,21 @@
     z-index: 5;
 }
 
+#ending-continue-btn {
+    left: 230px;
+    top: 70px;
+    background: linear-gradient(135deg, #ff4d88, #ff7eb3);
+    color: white;
+    box-shadow: 0 10px 30px rgba(255, 70, 140, 0.4);
+    animation: cardAppear 0.5s ease forwards;
+    z-index: 15;
+}
+
+#ending-continue-btn:hover {
+    box-shadow: 0 0 30px rgba(255, 90, 170, 0.8);
+    transform: scale(1.08);
+}
+
 /* ===========================
    Keyframe Animations
 =========================== */
@@ -301,5 +316,11 @@
 
     .no-btn {
         left: calc(100% - 180px);
+    }
+
+    #ending-continue-btn {
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        top: 145px !important;
     }
 }

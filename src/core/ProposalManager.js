@@ -61,12 +61,27 @@ export function initProposal() {
     typeElementText(messageEl, "I have something important to ask... ❤️", 35);
   });
 
+  function handleGlobalTouch(e) {
+    if (e.touches && e.touches.length > 0) {
+      handleGlobalMouse({
+        clientX: e.touches[0].clientX,
+        clientY: e.touches[0].clientY
+      });
+    }
+  }
+
   document.addEventListener("mousemove", handleGlobalMouse);
+  document.addEventListener("touchmove", handleGlobalTouch, { passive: true });
 
   noBtn.addEventListener("click", (e) => {
     e.preventDefault();
     moveButtonRandomly();
   });
+
+  noBtn.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    moveButtonRandomly();
+  }, { passive: false });
 
   yesBtn.addEventListener("click", acceptLove);
 
@@ -214,6 +229,7 @@ export function initProposal() {
   function acceptLove() {
     isAccepted = true;
     document.removeEventListener("mousemove", handleGlobalMouse);
+    document.removeEventListener("touchmove", handleGlobalTouch);
 
     bpmValue.textContent = "180";
     bpmValue.style.color = "#00ffcc";

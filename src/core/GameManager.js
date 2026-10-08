@@ -3,12 +3,14 @@ import {
     playDelete,
     playSuccess,
     playError,
-    startBackgroundMusic
+    startBackgroundMusic,
+    stopBackgroundMusic
 } from "./AudioManager";
 
 import { navigate } from "./Router";
 
 import {
+    animateLogin,
     animateButtonPress,
     playWrongAnimation,
     playSuccessAnimation
@@ -16,9 +18,10 @@ import {
 
 import { Puzzle1 } from "../pages/Puzzle1";
 
-const SECRET_CODE = "67676767";
+const SECRET_CODE = "10112005";
 
 let currentCode = [];
+let activeKeyHandler = null;
 
 export function initLogin() {
     const boxes = document.querySelectorAll(".code-box");
@@ -29,48 +32,35 @@ export function initLogin() {
 
     if (!boxes.length || !enterBtn) return;
 
-    // تنظيف أي تكرار قديم للأزرار لمنع تداخل الأحداث
-    numberButtons.forEach(button => {
-        const newBtn = button.cloneNode(true);
-        button.parentNode.replaceChild(newBtn, button);
-    });
+    currentCode = [];
 
-    const freshNumberButtons = document.querySelectorAll("[data-value]");
-    const freshDeleteBtn = document.getElementById("delete-btn");
-    const freshEnterBtn = document.getElementById("enter-btn");
+    // تشغيل أنيميشن الدخول الجميل للوجن
+    animateLogin();
 
     function render() {
         boxes.forEach((box, index) => {
             box.textContent = currentCode[index] || "";
-            box.style.color = "#ffffff"; // تثبيت لون النص إجبارياً
+            box.style.color = "#ffffff";
         });
     }
 
-    freshNumberButtons.forEach(button => {
-        button.addEventListener("click", () => {
-            startBackgroundMusic();
-            playClick();
-            animateButtonPress(button);
+    function handleInput(val) {
+        startBackgroundMusic();
+        playClick();
+        if (currentCode.length >= SECRET_CODE.length) return;
+        currentCode.push(val);
+        render();
+    }
 
-            if (currentCode.length >= SECRET_CODE.length) return;
-
-            currentCode.push(button.dataset.value);
-            render();
-        });
-    });
-
-    freshDeleteBtn.addEventListener("click", () => {
+    function handleDelete() {
         startBackgroundMusic();
         playDelete();
-        animateButtonPress(freshDeleteBtn);
-
         currentCode.pop();
         render();
-    });
+    }
 
-    freshEnterBtn.addEventListener("click", () => {
+    function handleEnter() {
         startBackgroundMusic();
-        animateButtonPress(freshEnterBtn);
 
         if (currentCode.length < SECRET_CODE.length) return;
 
@@ -78,7 +68,13 @@ export function initLogin() {
             playSuccess();
             playSuccessAnimation(card, boxes);
 
+            if (activeKeyHandler) {
+                window.removeEventListener("keydown", activeKeyHandler);
+                activeKeyHandler = null;
+            }
+
             setTimeout(() => {
+                stopBackgroundMusic();
                 navigate(Puzzle1);
             }, 900);
 
@@ -91,7 +87,53 @@ export function initLogin() {
                 render();
             }, 450);
         }
+    }
+
+    numberButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            animateButtonPress(button);
+            handleInput(button.dataset.value);
+        });
     });
+
+    if (deleteBtn) {
+        deleteBtn.addEventListener("click", () => {
+            animateButtonPress(deleteBtn);
+            handleDelete();
+        });
+    }
+
+    if (enterBtn) {
+        enterBtn.addEventListener("click", () => {
+            animateButtonPress(enterBtn);
+            handleEnter();
+        });
+    }
+
+    // دعم لوحة المفاتيح في الكمبيوتر
+    if (activeKeyHandler) {
+        window.removeEventListener("keydown", activeKeyHandler);
+    }
+    activeKeyHandler = (e) => {
+        if (!document.querySelector(".login-card")) {
+            window.removeEventListener("keydown", activeKeyHandler);
+            activeKeyHandler = null;
+            return;
+        }
+
+        if (e.key >= "0" && e.key <= "9") {
+            const btn = document.querySelector(`[data-value="${e.key}"]`);
+            if (btn) animateButtonPress(btn);
+            handleInput(e.key);
+        } else if (e.key === "Backspace") {
+            if (deleteBtn) animateButtonPress(deleteBtn);
+            handleDelete();
+        } else if (e.key === "Enter") {
+            if (enterBtn) animateButtonPress(enterBtn);
+            handleEnter();
+        }
+    };
+    window.addEventListener("keydown", activeKeyHandler);
 
     render();
 }

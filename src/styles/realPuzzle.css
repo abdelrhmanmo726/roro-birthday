@@ -70,8 +70,10 @@
 =========================== */
 
 .real-puzzle-wrapper {
-  width: 800px;
-  height: 600px;
+  width: min(800px, 95vw);
+  max-width: 100%;
+  aspect-ratio: 800 / 600;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -89,8 +91,11 @@
 }
 
 #real-puzzle-board {
-  width: 800px;
-  height: 600px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 25px;
 }
 

@@ -6,36 +6,36 @@ import confetti from "canvas-confetti";
 ============================ */
 
 export function animateLogin() {
-
     const card = document.querySelector(".login-card");
     const boxes = document.querySelectorAll(".code-box");
     const buttons = document.querySelectorAll(".number-pad button");
 
+    if (!card) return;
+
     const tl = gsap.timeline();
 
     tl.from(card, {
-        y: 80,
+        y: 60,
         opacity: 0,
-        duration: 0.8,
+        duration: 0.7,
         ease: "power3.out"
     })
-
     .from(boxes, {
         scale: 0,
         opacity: 0,
-        stagger: 0.08,
-        duration: 0.4,
+        stagger: 0.05,
+        duration: 0.35,
         ease: "back.out(1.7)"
-    }, "-=0.35")
-
+    }, "-=0.3")
     .from(buttons, {
         y: 20,
+        scale: 0.6,
         opacity: 0,
-        stagger: 0.05,
+        stagger: 0.03,
         duration: 0.25,
-        ease: "power2.out"
+        ease: "back.out(1.4)",
+        clearProps: "all"
     }, "-=0.2");
-
 }
 
 

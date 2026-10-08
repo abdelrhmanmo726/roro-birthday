@@ -1,6 +1,11 @@
 import { FloatingBackground } from "../components/FloatingBackground";
+import { initLogin } from "../core/GameManager.js";
 
 export function Login() {
+    setTimeout(() => {
+        initLogin();
+    }, 50);
+
     return `
     <section class="login-screen">
         ${FloatingBackground()}

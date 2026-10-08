@@ -65,21 +65,42 @@ export function playError() {
 let musicStarted = false;
 
 export function startBackgroundMusic() {
-
     if (musicStarted) return;
-
     musicStarted = true;
 
     bgMusic.play().catch(() => {});
 
     gsap.to(bgMusic, {
-
         volume: 0.12,
-
         duration: 2,
-
         ease: "power2.out"
-
     });
 
+    if (typeof window !== "undefined" && window.__setVinylPlaying) {
+        window.__setVinylPlaying(true);
+    }
+}
+
+export function stopBackgroundMusic() {
+    if (bgMusic) {
+        gsap.killTweensOf(bgMusic);
+        bgMusic.pause();
+        bgMusic.currentTime = 0;
+        bgMusic.volume = 0;
+    }
+    musicStarted = false;
+
+    if (typeof window !== "undefined" && window.__setVinylPlaying) {
+        window.__setVinylPlaying(false);
+    }
+}
+
+export function stopAllAudio() {
+    stopBackgroundMusic();
+    Object.values(sounds).forEach(audio => {
+        if (audio) {
+            audio.pause();
+            audio.currentTime = 0;
+        }
+    });
 }

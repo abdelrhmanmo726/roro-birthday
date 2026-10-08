@@ -1,26 +1,23 @@
 import "../styles/realPuzzle.css";
 import graduationImage from "../assets/images/graduation.jpg";
+import confetti from "canvas-confetti";
 import { RealPuzzle } from "../components/RealPuzzleBoard";
 import { initRealPuzzle } from "../core/RealPuzzleManager";
 import { navigate } from "../core/Router.js";
 import { Puzzle3 } from "../pages/Puzzle3.js";
+import { stopAllAudio } from "../core/AudioManager.js";
 
 export function Puzzle2() {
   setTimeout(() => {
     initRealPuzzle(graduationImage, () => {
-      if (typeof confetti === "function") {
-        confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
-      }
+      confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
     });
 
     const nextBtn = document.querySelector(".next-btn");
     if (nextBtn) {
       nextBtn.addEventListener("click", (e) => {
         e.preventDefault();
-        document.querySelectorAll("audio").forEach(audio => {
-          audio.pause();
-          audio.currentTime = 0;
-        });
+        stopAllAudio();
         navigate(Puzzle3);
       });
     }

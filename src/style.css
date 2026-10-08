@@ -7,11 +7,16 @@
 @import "./styles/proposal.css";
 @import "./styles/cakeEnding.css";
 @import "./styles/Cinematic.css";
+@import "./styles/storyProgress.css";
+@import "./styles/vinylPlayer.css";
+@import "./styles/petals.css";
+@import "./styles/constellation.css";
 
 
 html,
 body,
-#root {
+#root,
+#app {
     width: 100%;
     min-height: 100%;
     height: auto !important;

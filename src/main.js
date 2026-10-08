@@ -1,19 +1,24 @@
 import "./style.css";
 import { Login } from "./pages/Login.js";
 import { navigate } from "./core/Router.js";
-import { initLogin } from "./core/GameManager.js"; 
+import { initStoryProgressTracker } from "./components/StoryProgressTracker.js";
+import { initMagicSparkleTrail } from "./components/MagicSparkleTrail.js";
+import { initAmbientVinylPlayer } from "./components/AmbientVinylPlayer.js";
+import { initFallingRosePetals } from "./components/FallingRosePetals.js";
+import { initParallaxGyroscope } from "./components/ParallaxGyroscope.js";
+import { initInteractiveConstellation } from "./components/InteractiveConstellation.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     const app = document.getElementById("app");
     if (!app) return;
 
-    // 1. عرض صفحة اللوجن أولاً في الـ DOM وتوليد الـ HTML
-    navigate(Login);
+    // Initialize Global Romantic & Interactive Systems
+    initStoryProgressTracker();
+    initMagicSparkleTrail();
+    initAmbientVinylPlayer();
+    initFallingRosePetals();
+    initParallaxGyroscope();
+    initInteractiveConstellation();
 
-    // 2. تأخير تشغيل الـ initLogin جزء من الثانية لضمان إن الـ DOM اتكتب فعلاً وبقى جاهز
-    setTimeout(() => {
-        if (typeof initLogin === "function") {
-            initLogin();
-        }
-    }, 50);
+    navigate(Login);
 });

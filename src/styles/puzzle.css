@@ -162,6 +162,21 @@ body {
   z-index: 2;
 }
 
+.puzzle-piece.selected-piece {
+  transform: scale(1.08) !important;
+  outline: 3px solid #ff4d88;
+  outline-offset: -2px;
+  box-shadow: 0 0 25px rgba(255, 77, 136, 0.9), inset 0 0 15px rgba(255, 77, 136, 0.4);
+  filter: brightness(1.2);
+  z-index: 10;
+  animation: piecePulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes piecePulse {
+  from { box-shadow: 0 0 15px rgba(255, 77, 136, 0.6); }
+  to { box-shadow: 0 0 30px rgba(255, 77, 136, 1); }
+}
+
 /* ===========================
    Greeting Card (الكارت الجانبي)
 =========================== */

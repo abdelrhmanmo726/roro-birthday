@@ -8,16 +8,14 @@ from "../core/PuzzleAnimation";
 
 import { navigate } from "../core/Router.js";
 import { Puzzle2 } from "../pages/Puzzle2.js";
+import { stopAllAudio } from "../core/AudioManager.js";
 
 let dragged = null;
+let selectedPiece = null;
 let puzzleCompleted = false;
 
 export function PuzzleBoard(image){
     const pieces = createPuzzle();
-
-    setTimeout(()=>{
-        initPuzzle();
-    },0);
 
     return `
     <div class="puzzle-board">
@@ -41,15 +39,69 @@ export function PuzzleBoard(image){
     `;
 }
 
+function handleWin() {
+    puzzleCompleted = true;
+    if (selectedPiece) {
+        selectedPiece.classList.remove("selected-piece");
+        selectedPiece = null;
+    }
+    puzzleSuccessAnimation();
+    showSuccessMessage();
+
+    document
+    .querySelectorAll(".puzzle-piece")
+    .forEach(piece=>{
+        piece.draggable = false;
+        piece.classList.remove("selected-piece");
+    });
+}
+
+function swapPieces(nodeA, nodeB) {
+    const parent = nodeA.parentNode;
+    const siblingA = nodeA.nextSibling === nodeB ? nodeA : nodeA.nextSibling;
+    nodeB.parentNode.insertBefore(nodeA, nodeB);
+    parent.insertBefore(nodeB, siblingA);
+}
+
 export function initPuzzle(){
+    puzzleCompleted = false;
+    dragged = null;
+    selectedPiece = null;
+
     const pieces = document.querySelectorAll(".puzzle-piece");
 
     pieces.forEach(piece=>{
+        // 1. الدعم باللمس / الضغط للتبديل (Tap to Swap - ممتاز للهواتف والكمبيوتر)
+        piece.addEventListener("click", () => {
+            if (puzzleCompleted) return;
+
+            if (!selectedPiece) {
+                selectedPiece = piece;
+                piece.classList.add("selected-piece");
+            } else if (selectedPiece === piece) {
+                piece.classList.remove("selected-piece");
+                selectedPiece = null;
+            } else {
+                swapPieces(selectedPiece, piece);
+                selectedPiece.classList.remove("selected-piece");
+                selectedPiece = null;
+
+                if (checkWin()) {
+                    handleWin();
+                }
+            }
+        });
+
+        // 2. دعم السحب والإفلات للماوس (Desktop Drag & Drop)
         piece.addEventListener(
         "dragstart",
         ()=>{
             if(puzzleCompleted)
                 return;
+            if (selectedPiece) {
+                selectedPiece.classList.remove("selected-piece");
+                selectedPiece = null;
+            }
             dragged = piece;
             piece.style.opacity="0.5";
         });
@@ -75,36 +127,11 @@ export function initPuzzle(){
             if(!dragged || dragged === piece)
                 return;
 
-            const parent = piece.parentNode;
-            const children = [...parent.children];
-            const draggedIndex = children.indexOf(dragged);
-            const targetIndex = children.indexOf(piece);
-
-            if(draggedIndex < targetIndex){
-                parent.insertBefore(
-                    dragged,
-                    piece.nextSibling
-                );
-            }
-            else{
-                parent.insertBefore(
-                    dragged,
-                    piece
-                );
-            }
-
-            dragged=null;
+            swapPieces(dragged, piece);
+            dragged = null;
 
             if(checkWin()){
-                puzzleCompleted=true;
-                puzzleSuccessAnimation();
-                showSuccessMessage();
-
-                document
-                .querySelectorAll(".puzzle-piece")
-                .forEach(piece=>{
-                    piece.draggable=false;
-                });
+                handleWin();
             }
         });
     });
@@ -147,17 +174,10 @@ function showSuccessMessage(){
         container.classList.add("completed");
     }
 
-    // ربط زر Continue بإيقاف الأغنية والانتقال لصفحة Puzzle2 باستخدام الراوتر
     const continueBtn = document.getElementById("continue-btn");
     if (continueBtn) {
         continueBtn.addEventListener("click", () => {
-            // إيقاف أي صوت أو أغنية شغالة في الصفحة
-            document.querySelectorAll("audio").forEach(audio => {
-                audio.pause();
-                audio.currentTime = 0;
-            });
-
-            // الانتقال للبازل الثاني
+            stopAllAudio();
             navigate(Puzzle2);
         });
     }

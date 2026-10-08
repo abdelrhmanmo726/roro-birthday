@@ -717,3 +717,288 @@
         line-height: 1.6;
     }
 }
+
+/* =====================================================
+   Relight Candle Button
+===================================================== */
+.relight-hidden {
+    display: none !important;
+}
+
+#relight-candle-btn {
+    background: linear-gradient(135deg, #ffd166, #f77f00);
+    box-shadow: 0 8px 25px rgba(247, 127, 0, 0.45);
+    margin-top: 10px;
+    animation: fadeInBtn 0.5s ease forwards;
+}
+
+@keyframes fadeInBtn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* =====================================================
+   Wish Modal Styles
+===================================================== */
+.wish-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 4, 12, 0.78);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.wish-modal--hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.wish-modal-card {
+    width: min(440px, 94vw);
+    background: rgba(28, 14, 32, 0.92);
+    border: 1px solid rgba(233, 196, 106, 0.4);
+    border-radius: 28px;
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 35px rgba(233, 196, 106, 0.25);
+    animation: wishPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes wishPop {
+    from { transform: scale(0.85) translateY(20px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.wish-modal-star {
+    font-size: 42px;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 0 15px #e9c46a);
+    animation: starPulse 2s ease-in-out infinite;
+}
+
+@keyframes starPulse {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.15) rotate(5deg); }
+}
+
+.wish-modal-title {
+    font-size: 24px;
+    color: #fffdfb;
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 8px;
+    text-shadow: 0 0 15px rgba(233, 196, 106, 0.5);
+}
+
+.wish-modal-desc {
+    font-size: 13px;
+    color: rgba(255, 230, 240, 0.75);
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.wish-modal-input {
+    width: 100%;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 120, 180, 0.35);
+    border-radius: 16px;
+    padding: 14px;
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    margin-bottom: 20px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.wish-modal-input:focus {
+    border-color: #e9c46a;
+    box-shadow: 0 0 15px rgba(233, 196, 106, 0.35);
+}
+
+.wish-modal-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.wish-send-btn {
+    padding: 12px 24px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #e9c46a, #f4a261);
+    color: #1a0918;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(233, 196, 106, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wish-send-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(233, 196, 106, 0.6);
+}
+
+.wish-skip-btn {
+    padding: 12px 18px;
+    border-radius: 999px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.wish-skip-btn:hover {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* =====================================================
+   Fingerprint Seal Stamp
+===================================================== */
+.cinematic-letter-card__signature-group {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.fingerprint-seal {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ff5f9e 0%, #c2185b 80%);
+    box-shadow: 0 6px 18px rgba(194, 24, 91, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(233, 196, 106, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.fingerprint-seal:hover {
+    transform: scale(1.08);
+    box-shadow: 0 8px 25px rgba(255, 95, 158, 0.6);
+}
+
+.fingerprint-icon {
+    font-size: 16px;
+    pointer-events: none;
+}
+
+.fingerprint-label {
+    font-size: 7px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: #fffdfb;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    pointer-events: none;
+    margin-top: 1px;
+}
+
+.fingerprint-ring {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-top-color: #e9c46a;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.fingerprint-seal.holding .fingerprint-ring {
+    opacity: 1;
+    animation: ringSpin 1.2s linear infinite;
+}
+
+@keyframes ringSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.fingerprint-seal.sealed {
+    background: radial-gradient(circle, #e9c46a 0%, #d4a373 70%, #b07d62 100%);
+    border-color: #fffdfb;
+    box-shadow: 0 0 25px rgba(233, 196, 106, 0.8), inset 0 2px 6px rgba(255, 255, 255, 0.5);
+    animation: sealGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes sealGlow {
+    from { box-shadow: 0 0 15px rgba(233, 196, 106, 0.6); }
+    to { box-shadow: 0 0 30px rgba(233, 196, 106, 1); }
+}
+
+.fingerprint-seal.sealed .fingerprint-label {
+    content: "SEALED";
+    color: #422935;
+}
+
+/* =====================================================
+   Letter Actions (Dim Lights, Save, Restart)
+===================================================== */
+.letter-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.letter-action-btn {
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: #422935;
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.letter-action-btn:hover {
+    background: rgba(255, 255, 255, 0.28);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* =====================================================
+   Dim the Lights Mode
+===================================================== */
+.memory-box-stage.dim-lights-active .memory-box-stage__vignette {
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.5) 20%, rgba(0, 0, 0, 0.95) 80%) !important;
+    transition: background 1s ease;
+}
+
+.memory-box-stage.dim-lights-active .cinematic-letter-card {
+    box-shadow: 0 0 60px rgba(255, 180, 100, 0.4), 0 20px 80px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Balloons & Fireworks Canvas */
+.balloons-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9997;
+}

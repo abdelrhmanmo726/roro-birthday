@@ -4,6 +4,10 @@ import birthdaySong from "../assets/sounds/happy_birthday.mp3";
 import { Login } from "../pages/Login.js";
 import { navigate } from "./Router.js";
 import { createCinematicTransition } from "../components/CinematicTransition.js";
+import { stopAllAudio } from "./AudioManager.js";
+import { playMagicChime, playCandleBreeze, playSealStamp } from "./SoundEffects.js";
+import { startBalloonsAndFireworks } from "./BalloonsFireworks.js";
+import { downloadLetterKeepsake } from "./LetterKeepsake.js";
 
 const STATES = {
     INIT: "INIT",
@@ -197,6 +201,7 @@ export function initCakeEndingManager(rootElement = document) {
                 }
             ));
         }
+        playMagicChime();
         fireSparkles();
     }
 
@@ -385,6 +390,8 @@ export function initCakeEndingManager(rootElement = document) {
     async function extinguishCandle() {
         if (!transitionTo(STATES.CANDLE_EXTINGUISHED)) return;
 
+        playCandleBreeze();
+
         if (blowFrameId) cancelAnimationFrame(blowFrameId);
 
         if (els.flame) {
@@ -422,14 +429,89 @@ export function initCakeEndingManager(rootElement = document) {
 
         tl.call(showSmoke)
           .call(() => {
-              const audio = getAudioInstance();
-              if (!audio.paused) audio.pause();
-              audio.currentTime = 0;
-              audio.play().catch(() => {
-                  console.log("[Audio] Autoplay Policy Blocked");
-              });
-          })
-          .call(showCinematicEnding);
+              // إظهار زر إعادة إشعال الشمعة
+              const relightBtn = rootElement.querySelector("#relight-candle-btn");
+              if (relightBtn) {
+                  relightBtn.classList.remove("relight-hidden");
+                  relightBtn.onclick = () => {
+                      relightCandle();
+                  };
+              }
+
+              // إظهار نافذة الأمنية للنجوم
+              showWishModal();
+          });
+    }
+
+    function relightCandle() {
+        if (els.flame && els.glow) {
+            gsap.to([els.flame, els.glow], { opacity: 1, scale: 1, duration: 0.5 });
+            els.flame.style.pointerEvents = "auto";
+            els.flame.style.cursor = "pointer";
+            els.flame.addEventListener("click", extinguishCandle, { once: true });
+        }
+        const relightBtn = rootElement.querySelector("#relight-candle-btn");
+        if (relightBtn) relightBtn.classList.add("relight-hidden");
+        if (els.blowInstruction) {
+            els.blowInstruction.style.display = "block";
+            els.blowInstruction.textContent = "Make a Wish... Blow the Candle";
+        }
+        currentState = STATES.CAKE_READY;
+    }
+
+    function showWishModal() {
+        const modal = rootElement.querySelector("#wish-modal");
+        if (!modal) {
+            proceedWithCelebration();
+            return;
+        }
+
+        modal.classList.remove("wish-modal--hidden");
+        const sendBtn = modal.querySelector("#send-wish-btn");
+        const skipBtn = modal.querySelector("#skip-wish-btn");
+        const wishInput = modal.querySelector("#wish-input");
+
+        let proceeded = false;
+
+        function proceedWithCelebration() {
+            if (proceeded) return;
+            proceeded = true;
+            modal.classList.add("wish-modal--hidden");
+
+            // تشغيل بالونات القلوب والألعاب النارية الباستيل
+            const stopBalloons = startBalloonsAndFireworks();
+            if (typeof stopBalloons === "function") {
+                standaloneTweens.push({ kill: stopBalloons });
+            }
+
+            const audio = getAudioInstance();
+            if (!audio.paused) audio.pause();
+            audio.currentTime = 0;
+            audio.play().catch(() => {
+                console.log("[Audio] Autoplay Policy Blocked");
+            });
+
+            setTimeout(() => {
+                showCinematicEnding();
+            }, 800);
+        }
+
+        if (sendBtn) {
+            sendBtn.onclick = () => {
+                const wish = wishInput ? wishInput.value.trim() : "";
+                if (wish) {
+                    try { localStorage.setItem("roro_secret_wish", wish); } catch (e) {}
+                }
+                playMagicChime();
+                proceedWithCelebration();
+            };
+        }
+
+        if (skipBtn) {
+            skipBtn.onclick = () => {
+                proceedWithCelebration();
+            };
+        }
     }
 
     function showSmoke() {
@@ -454,16 +536,99 @@ export function initCakeEndingManager(rootElement = document) {
             const footerEl = els.cinematicEnding.querySelector(".cinematic-letter-card__footer");
             const nextBtn = els.cinematicEnding?.querySelector(SELECTORS.nextMemoryBtn);
 
+            // 1. بصمة التوقيع الرومانسية
+            const seal = els.cinematicEnding?.querySelector("#fingerprint-seal");
+            if (seal) {
+                if (localStorage.getItem("roro_letter_sealed") === "true") {
+                    seal.classList.add("sealed");
+                }
+
+                let sealTimer = null;
+                const startHold = (e) => {
+                    e.preventDefault();
+                    if (seal.classList.contains("sealed")) return;
+                    seal.classList.add("holding");
+                    sealTimer = setTimeout(() => {
+                        seal.classList.remove("holding");
+                        seal.classList.add("sealed");
+                        playSealStamp();
+                        try { localStorage.setItem("roro_letter_sealed", "true"); } catch (err) {}
+                        confetti({
+                            particleCount: 50,
+                            spread: 70,
+                            origin: { y: 0.8 },
+                            colors: ['#e9c46a', '#ff5f9e', '#ffffff']
+                        });
+                    }, 1200);
+                };
+
+                const endHold = () => {
+                    seal.classList.remove("holding");
+                    if (sealTimer) clearTimeout(sealTimer);
+                };
+
+                seal.addEventListener("pointerdown", startHold);
+                seal.addEventListener("pointerup", endHold);
+                seal.addEventListener("pointerleave", endHold);
+            }
+
+            // 2. وضع إطفاء الأنوار السينمائي
+            const dimBtn = els.cinematicEnding?.querySelector("#dim-lights-btn");
+            if (dimBtn) {
+                const stageRoot = rootElement.querySelector('[data-element="stage-root"]');
+                dimBtn.addEventListener("click", () => {
+                    if (stageRoot) {
+                        stageRoot.classList.toggle("dim-lights-active");
+                        const isActive = stageRoot.classList.contains("dim-lights-active");
+                        dimBtn.textContent = isActive ? "☀️ Normal" : "🌙 Dim Lights";
+                    }
+                });
+            }
+
+            // 3. زر حفظ وتحميل الرسالة كتذكار
+            const downloadBtn = els.cinematicEnding?.querySelector("#download-letter-btn");
+            if (downloadBtn) {
+                downloadBtn.addEventListener("click", async () => {
+                    downloadBtn.disabled = true;
+                    const originalText = downloadBtn.innerHTML;
+                    downloadBtn.innerHTML = "⏳ Saving...";
+                    try {
+                        await downloadLetterKeepsake();
+                        playMagicChime();
+                        confetti({
+                            particleCount: 45,
+                            spread: 60,
+                            origin: { y: 0.8 },
+                            colors: ['#ff99b6', '#ffd1dc', '#e9c46a']
+                        });
+                        downloadBtn.innerHTML = "✓ Saved!";
+                    } catch (e) {
+                        console.error(e);
+                        downloadBtn.innerHTML = originalText;
+                    } finally {
+                        setTimeout(() => {
+                            downloadBtn.innerHTML = originalText;
+                            downloadBtn.disabled = false;
+                        }, 2200);
+                    }
+                });
+            }
+
+            // 4. زر اللقطة السينمائية الختامية
             if (nextBtn) {
                 nextBtn.addEventListener("click", () => {
-                    // منع أي ضغطات متكررة أثناء الانتقال للحفاظ على النعومة المطلقة
-                    nextBtn.style.pointerEvents = "none";
-                    nextBtn.style.opacity = "0.5";
+                    stopAllAudio();
 
-                    // تشغيل الانتقال السينمائي للعينين بسلاسة تامة قبل العودة للبداية
-                    createCinematicTransition(() => {
-                        navigate(Login); 
-                    });
+                    createCinematicTransition(
+                        () => {
+                            destroy();
+                            stopAllAudio();
+                            navigate(Login);
+                        },
+                        () => {
+                            startBackgroundMusic();
+                        }
+                    );
                 });
             }
 
@@ -519,6 +684,12 @@ Happy Birthday again, Rony. I hope this year becomes the beginning of many beaut
             if (bIndex < bodyText.length) {
                 const currentText = bodyText.substring(0, bIndex + 1);
                 bodyEl.innerHTML = currentText.replace(/\n/g, '<br>') + '<span class="typewriter-cursor"></span>';
+                
+                const scrollContainer = els.cinematicEnding?.querySelector(".cinematic-letter-card__body-scroll-container");
+                if (scrollContainer) {
+                    scrollContainer.scrollTop = scrollContainer.scrollHeight;
+                }
+
                 bIndex++;
                 letterTypewriterTimeout = setTimeout(typeBody, 30);
             } else {
@@ -626,7 +797,7 @@ Happy Birthday again, Rony. I hope this year becomes the beginning of many beaut
         });
     }
 
-    return function destroy() {
+    function destroy() {
         isDestroyed = true;
         if (letterTypewriterTimeout) clearTimeout(letterTypewriterTimeout);
 
@@ -655,7 +826,10 @@ Happy Birthday again, Rony. I hope this year becomes the beginning of many beaut
         }
         if (birthdayAudio) {
             birthdayAudio.pause();
+            birthdayAudio.currentTime = 0;
             birthdayAudio = null;
         }
-    };
+    }
+
+    return destroy;
 }

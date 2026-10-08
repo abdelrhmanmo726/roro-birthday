@@ -90,6 +90,14 @@ export function CakeEndingBox(photoSrc) {
                             >
                                 Blow the Candle
                             </button>
+                            <button 
+                                id="relight-candle-btn" 
+                                type="button" 
+                                class="romantic-btn relight-hidden" 
+                                aria-label="Relight the candle"
+                            >
+                                🕯️ Relight Candle
+                            </button>
                         </div>
                     </section>
 
@@ -118,7 +126,25 @@ export function CakeEndingBox(photoSrc) {
                 </div>
             </main>
 
-            <!-- 3. CINEMATIC ENDING STAGE -->
+            <!-- 3. WISH MODAL -->
+            <div id="wish-modal" class="wish-modal-overlay wish-modal--hidden">
+                <div class="wish-modal-card">
+                    <div class="wish-modal-star">🌠</div>
+                    <h3 class="wish-modal-title">Make a Wish, Roro ✨</h3>
+                    <p class="wish-modal-desc">Before reading your letter, whisper a secret wish into the stars for your new year.</p>
+                    <textarea id="wish-input" class="wish-modal-input" placeholder="Whisper your secret wish here..." rows="3"></textarea>
+                    <div class="wish-modal-buttons">
+                        <button id="send-wish-btn" type="button" class="wish-send-btn">
+                            Send to the Stars 🚀✨
+                        </button>
+                        <button id="skip-wish-btn" type="button" class="wish-skip-btn">
+                            Skip to Letter ›
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. CINEMATIC ENDING STAGE -->
             <div data-element="cinematic-ending" class="cinematic-ending-stage">
                 <article class="cinematic-letter-card">
                     <img src="${cardImage}" class="cinematic-letter-card__paper" alt="Birthday Letter Card" />
@@ -137,14 +163,35 @@ export function CakeEndingBox(photoSrc) {
                         </div>
 
                         <div class="cinematic-letter-card__footer">
-                            <div class="cinematic-letter-card__signature">Abdelrhman</div>
-                            <button type="button" class="next-memory-btn" data-element="next-memory-btn">
-                                ↻ Restart Experience
-                            </button>
+                            <div class="cinematic-letter-card__signature-group">
+                                <div class="cinematic-letter-card__signature">Abdelrhman</div>
+                                
+                                <!-- Romantic Fingerprint Seal -->
+                                <div class="fingerprint-seal" id="fingerprint-seal" title="Hold with finger or click to seal">
+                                    <div class="fingerprint-ring"></div>
+                                    <div class="fingerprint-icon">❤️</div>
+                                    <span class="fingerprint-label">Hold to Seal</span>
+                                </div>
+                            </div>
+
+                            <div class="letter-actions">
+                                <button type="button" class="letter-action-btn" id="dim-lights-btn" title="Toggle romantic candlelight">
+                                    🌙 Dim Lights
+                                </button>
+                                <button type="button" class="letter-action-btn" id="download-letter-btn" title="Save letter as image">
+                                    📸 Save Memory
+                                </button>
+                                <button type="button" class="next-memory-btn" data-element="next-memory-btn" title="Watch our final cinematic surprise">
+                                    ✨ Watch Final Secret 👁️
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </article>
             </div>
+
+            <!-- Balloons & Fireworks Canvas -->
+            <canvas id="balloons-canvas" class="balloons-canvas" aria-hidden="true"></canvas>
 
             <div data-element="gift-flash" class="memory-box-stage__flash memory-box-stage__flash--hidden" aria-hidden="true"></div>
         </section>

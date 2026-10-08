@@ -1,0 +1,105 @@
+/* =====================================================
+   Storyline Progress Tracker (Floating Glass Pill)
+===================================================== */
+.story-tracker {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9990;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: rgba(22, 11, 28, 0.72);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 120, 180, 0.28);
+    border-radius: 999px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(255, 95, 158, 0.15);
+    user-select: none;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    max-width: 94vw;
+}
+
+.story-tracker.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -20px);
+}
+
+.tracker-step {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    color: rgba(255, 255, 255, 0.45);
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    white-space: nowrap;
+}
+
+.tracker-step__icon {
+    font-size: 13px;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.tracker-step__label {
+    display: inline-block;
+    letter-spacing: 0.3px;
+}
+
+.tracker-divider {
+    color: rgba(255, 120, 180, 0.25);
+    font-size: 10px;
+    user-select: none;
+}
+
+/* Past Step */
+.tracker-step.past {
+    color: rgba(255, 210, 230, 0.75);
+}
+.tracker-step.past .tracker-step__icon {
+    filter: drop-shadow(0 0 4px #ff7eb3);
+}
+
+/* Active Step */
+.tracker-step.active {
+    color: #ffffff;
+    background: linear-gradient(135deg, rgba(255, 95, 158, 0.45), rgba(255, 143, 171, 0.25));
+    border: 1px solid rgba(255, 143, 171, 0.5);
+    box-shadow: 0 0 15px rgba(255, 95, 158, 0.4);
+    transform: scale(1.05);
+}
+
+.tracker-step.active .tracker-step__icon {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 8px #ff5f9e);
+    animation: iconBounce 1.5s ease-in-out infinite;
+}
+
+@keyframes iconBounce {
+    0%, 100% { transform: translateY(0) scale(1.2); }
+    50% { transform: translateY(-2px) scale(1.3); }
+}
+
+/* Mobile Responsive */
+@media (max-width: 680px) {
+    .story-tracker {
+        top: 10px;
+        padding: 5px 10px;
+        gap: 3px;
+    }
+    .tracker-step {
+        padding: 4px 8px;
+        font-size: 10px;
+        gap: 4px;
+    }
+    .tracker-step:not(.active) .tracker-step__label {
+        display: none; /* Show icon only for inactive steps on mobile to fit nicely */
+    }
+}
