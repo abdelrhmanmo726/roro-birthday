@@ -50,3 +50,6 @@ export function Puzzle3() {
     </section>
   `;
 }
+
+Puzzle3.step = 3;
+Puzzle3.pageId = "Puzzle3";

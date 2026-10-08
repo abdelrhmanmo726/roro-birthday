@@ -11,3 +11,6 @@ export function Ending() {
 
     return CakeEndingBox(roroPhoto);
 }
+
+Ending.step = 4;
+Ending.pageId = "Ending";

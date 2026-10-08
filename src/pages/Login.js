@@ -281,3 +281,6 @@ export function Login() {
     </section>
     `;
 }
+
+Login.step = 0;
+Login.pageId = "Login";

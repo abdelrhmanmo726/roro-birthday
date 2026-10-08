@@ -10,7 +10,13 @@ const STEPS = [
 let trackerEl = null;
 
 export function initStoryProgressTracker() {
-    if (trackerEl || typeof document === "undefined") return;
+    if (typeof document === "undefined") return;
+
+    if (!trackerEl) {
+        trackerEl = document.querySelector(".story-tracker");
+    }
+
+    if (trackerEl) return;
 
     trackerEl = document.createElement("nav");
     trackerEl.className = "story-tracker";
@@ -40,4 +46,20 @@ export function updateStoryProgress(stepIndex) {
             node.classList.add("past");
         }
     });
+
+    const dividerNodes = trackerEl.querySelectorAll(".tracker-divider");
+    dividerNodes.forEach((divider, idx) => {
+        if (idx < stepIndex) {
+            divider.classList.add("past");
+        } else {
+            divider.classList.remove("past");
+        }
+    });
 }
+
+export function setStoryTrackerVisible(visible) {
+    if (!trackerEl) return;
+    trackerEl.classList.toggle("hidden", !visible);
+}
+
+

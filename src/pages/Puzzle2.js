@@ -52,3 +52,6 @@ I hope we'll stand together on graduation day. 🎓✨</p>
     </section>
   `;
 }
+
+Puzzle2.step = 2;
+Puzzle2.pageId = "Puzzle2";

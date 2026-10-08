@@ -28,3 +28,6 @@ export function Puzzle1(){
 </section>
     `;
 }
+
+Puzzle1.step = 1;
+Puzzle1.pageId = "Puzzle1";
