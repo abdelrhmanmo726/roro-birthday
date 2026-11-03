@@ -92,9 +92,10 @@
 
 .cinematic-image-container {
     position: relative;
-    width: 100%;
-    max-width: 1920px;
-    height: min(85vh, 900px);
+    width: min(94vw, 1520px);
+    aspect-ratio: 16 / 9;
+    max-height: 84vh;
+    height: auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -428,8 +429,10 @@
 ===================================================== */
 @media (max-width: 768px) {
     .cinematic-image-container {
-        height: min(65vh, 480px);
-        width: 100vw;
+        width: 96vw;
+        aspect-ratio: 16 / 9;
+        height: auto;
+        max-height: 65vh;
     }
 
     .cinematic-eyes-img {

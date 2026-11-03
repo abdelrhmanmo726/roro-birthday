@@ -115,12 +115,18 @@ body {
 }
 
 .puzzle-layout.completed .puzzle-board {
+  border-color: rgba(255, 143, 171, 0.55);
   animation: boardSuccessGlow 2s ease infinite alternate;
+}
+
+.puzzle-layout.completed .puzzle-piece {
+  border-color: transparent;
 }
 
 .puzzle-board {
   width: 360px;
-  height: 360px;
+  height: 480px;
+  aspect-ratio: 3 / 4;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
@@ -128,16 +134,16 @@ body {
   overflow: hidden;
   border-radius: 25px;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 2px solid rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   box-shadow: 
     0 35px 80px rgba(0, 0, 0, 0.45),
-    0 0 35px rgba(255, 120, 180, 0.08);
+    0 0 35px rgba(255, 120, 180, 0.14);
   cursor: pointer;
   perspective: 1000px;
   animation: boardIntro 0.8s ease;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
 }
 
 .puzzle-board:hover {
@@ -410,8 +416,8 @@ body {
 
 @media (max-width: 500px) {
   .puzzle-board {
-    width: 290px;
-    height: 290px;
+    width: 285px;
+    height: 380px;
   }
 
   .puzzle-success {

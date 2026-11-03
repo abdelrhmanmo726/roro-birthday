@@ -62,7 +62,7 @@ export function createCinematicTransition(onComplete, onBackToLetter, onBackToCa
         <div class="cinematic-outro-card" id="eyes-outro-card">
             <div class="outro-sparkle">✨</div>
             <h2 class="outro-title">Happy Birthday, Roro ❤️</h2>
-            <p class="outro-quote">“ May your days always be as bright and beautiful as your eyes. ”</p>
+            <p class="outro-quote">“ May your days always be as bright and beautiful as your eyes ❤️ ”</p>
             <div class="outro-signature">— Abdelrhman</div>
 
             <div class="outro-actions">
@@ -97,9 +97,10 @@ export function createCinematicTransition(onComplete, onBackToLetter, onBackToCa
     // ==========================================
     let animFrameId = null;
     let particles = [];
+    let resizeCanvas = null;
     if (particlesCanvas) {
         const pCtx = particlesCanvas.getContext("2d");
-        const resizeCanvas = () => {
+        resizeCanvas = () => {
             particlesCanvas.width = window.innerWidth;
             particlesCanvas.height = window.innerHeight;
         };
@@ -152,6 +153,7 @@ export function createCinematicTransition(onComplete, onBackToLetter, onBackToCa
     let targetTiltY = 0;
     let currentTiltX = 0;
     let currentTiltY = 0;
+    let tiltFrameId = null;
 
     const onMouseMove = (e) => {
         const xPercent = (e.clientX / window.innerWidth) - 0.5;
@@ -176,7 +178,7 @@ export function createCinematicTransition(onComplete, onBackToLetter, onBackToCa
         if (container3D) {
             container3D.style.transform = `perspective(1000px) rotateX(${currentTiltX}deg) rotateY(${currentTiltY}deg)`;
         }
-        requestAnimationFrame(updateTilt);
+        tiltFrameId = requestAnimationFrame(updateTilt);
     };
     updateTilt();
 
@@ -366,6 +368,9 @@ export function createCinematicTransition(onComplete, onBackToLetter, onBackToCa
     // ==========================================
     function cleanupAndClose(callback) {
         if (animFrameId) cancelAnimationFrame(animFrameId);
+        if (tiltFrameId) cancelAnimationFrame(tiltFrameId);
+        if (resizeCanvas) window.removeEventListener("resize", resizeCanvas);
+        if (masterTl) masterTl.kill();
         window.removeEventListener("mousemove", onMouseMove);
         window.removeEventListener("deviceorientation", onDeviceOrientation);
         stopAudioTrack();

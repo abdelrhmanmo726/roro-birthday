@@ -88,6 +88,11 @@ export function initProposal() {
   // متابعة حركة الماوس لحساب النبض والسرعات
   function handleGlobalMouse(e) {
     if (isAccepted) return;
+    if (!document.body.contains(card)) {
+      document.removeEventListener("mousemove", handleGlobalMouse);
+      document.removeEventListener("touchmove", handleGlobalTouch);
+      return;
+    }
 
     const now = Date.now();
     const dt = (now - lastMoveTime) / 1000;

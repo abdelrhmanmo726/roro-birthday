@@ -165,9 +165,14 @@ export function initRealPuzzle(imagePath, onWinCallback) {
         const targetX = boardX + c * pieceWidth;
         const targetY = boardY + r * pieceHeight;
 
+        const minLeft = 18;
+        const maxLeft = Math.max(minLeft, boardX - pieceWidth - 22);
+        const minRight = boardX + boardWidth + 22;
+        const maxRight = Math.max(minRight, stageWidth - pieceWidth - 18);
+
         const randomX = Math.random() > 0.5 
-          ? Math.random() * (boardX - pieceWidth - 20)
-          : boardX + boardWidth + 20 + Math.random() * (stageWidth - (boardX + boardWidth) - pieceWidth - 20);
+          ? minLeft + Math.random() * (maxLeft - minLeft)
+          : minRight + Math.random() * (maxRight - minRight);
         const randomY = 40 + Math.random() * (stageHeight - pieceHeight - 80);
 
         const piece = new Konva.Shape({

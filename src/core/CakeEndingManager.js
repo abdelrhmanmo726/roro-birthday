@@ -4,7 +4,7 @@ import birthdaySong from "../assets/sounds/happy_birthday.mp3";
 import { Login } from "../pages/Login.js";
 import { navigate } from "./Router.js";
 import { createCinematicTransition } from "../components/CinematicTransition.js";
-import { stopAllAudio } from "./AudioManager.js";
+import { stopAllAudio, startBackgroundMusic } from "./AudioManager.js";
 import { playMagicChime, playCandleBreeze, playSealStamp } from "./SoundEffects.js";
 import { startBalloonsAndFireworks } from "./BalloonsFireworks.js";
 import { downloadLetterKeepsake } from "./LetterKeepsake.js";
@@ -541,6 +541,8 @@ export function initCakeEndingManager(rootElement = document) {
             if (seal) {
                 if (localStorage.getItem("roro_letter_sealed") === "true") {
                     seal.classList.add("sealed");
+                    const labelEl = seal.querySelector(".fingerprint-label");
+                    if (labelEl) labelEl.textContent = "SEALED";
                 }
 
                 let sealTimer = null;
@@ -551,6 +553,8 @@ export function initCakeEndingManager(rootElement = document) {
                     sealTimer = setTimeout(() => {
                         seal.classList.remove("holding");
                         seal.classList.add("sealed");
+                        const labelEl = seal.querySelector(".fingerprint-label");
+                        if (labelEl) labelEl.textContent = "SEALED";
                         playSealStamp();
                         try { localStorage.setItem("roro_letter_sealed", "true"); } catch (err) {}
                         confetti({
@@ -617,6 +621,10 @@ export function initCakeEndingManager(rootElement = document) {
             // 4. زر اللقطة السينمائية الختامية
             if (nextBtn) {
                 nextBtn.addEventListener("click", () => {
+                    if (birthdayAudio) {
+                        birthdayAudio.pause();
+                        birthdayAudio.currentTime = 0;
+                    }
                     stopAllAudio();
 
                     createCinematicTransition(

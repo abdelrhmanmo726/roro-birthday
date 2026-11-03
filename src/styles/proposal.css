@@ -165,10 +165,13 @@
 }
 
 .proposal-image {
-    width: 240px;
+    width: min(260px, 75vw);
+    aspect-ratio: 4 / 3;
+    height: auto;
     border-radius: 22px;
-    margin-bottom: 25px;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(255, 128, 191, 0.35);
+    margin-bottom: 22px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45), 0 0 20px rgba(255, 51, 133, 0.2);
     object-fit: cover;
 }
 

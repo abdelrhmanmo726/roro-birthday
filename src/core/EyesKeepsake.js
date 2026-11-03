@@ -77,11 +77,11 @@ export async function downloadEyesKeepsake() {
     ctx.textAlign = "center";
 
     // English Quote
-    ctx.font = "italic 34px 'Playfair Display', Georgia, serif";
+    ctx.font = "italic 30px 'Playfair Display', Georgia, serif";
     ctx.fillStyle = "#fff0f5";
     ctx.shadowColor = "rgba(255, 182, 193, 0.5)";
     ctx.shadowBlur = 14;
-    ctx.fillText("“ I find myself getting lost in your eyes... ”", 800, 980);
+    ctx.fillText("“ May your days always be as bright and beautiful as your eyes ❤️ ”", 800, 980);
 
     // Date
     ctx.font = "600 17px 'Poppins', sans-serif";
